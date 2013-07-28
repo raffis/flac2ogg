@@ -68,10 +68,12 @@ if __name__ == '__main__':
 
             if name.split('.')[-1].lower() in ['wav','aiff','flac','pcm','raw']+args.e:
                 output_file=output_file.rpartition('.')[0]+'.ogg'
-                commandlines.append('oggenc -Q -q %s %s -o %s %s' % (args.q,args.o,quote(output_file),quote(input_file)))
+                if not os.path.exists(output_file):
+                    commandlines.append('oggenc -Q -q %s %s -o %s %s' % (args.q,args.o,quote(output_file),quote(input_file)))
             else:
-                print("Copying %s" % (input_file))
-                shutil.copy(input_file,output_file)
+                if not os.path.exists(output_file):
+                    print("Copying %s" % (input_file))
+                    shutil.copy(input_file,output_file)
 
     #Clear queue
     total_commands=str(len(commandlines))
